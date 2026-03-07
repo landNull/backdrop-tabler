@@ -1,0 +1,14 @@
+name = Tabler
+description = Sidebar and content. Uses the Tabler page structure.
+type = layout
+backdrop = 1.x
+version = 1.0.0
+
+regions[header] = Header
+regions[top] = Top
+regions[navigation] = Navigation
+regions[content] = Content
+regions[sidebar] = Sidebar
+regions[footer] = Footer
+
+default region = content

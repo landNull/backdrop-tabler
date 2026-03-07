@@ -1,0 +1,169 @@
+/* Tabler overrides for Backdrop core modules. */
+
+/* Views */
+.view.card { margin-bottom: 1.5rem; }
+.view .table { margin-bottom: 0; }
+
+/* Forms */
+.form-item { margin-bottom: 1rem; }
+.form-text, .form-select, .form-textarea {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--tblr-border-color, #dadfe5);
+  border-radius: var(--tblr-border-radius, 4px);
+  background: var(--tblr-bg-forms, #fff);
+  color: inherit;
+}
+.form-submit, .button {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--tblr-border-radius, 4px);
+  background: var(--tblr-primary, #206bc4);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Messages */
+div.messages {
+  border-radius: var(--tblr-border-radius, 4px);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+div.messages.status { background: var(--tblr-success-lt, #d1e7dd); }
+div.messages.warning { background: var(--tblr-warning-lt, #fff3cd); }
+div.messages.error { background: var(--tblr-danger-lt, #f8d7da); }
+
+/* Pager */
+.pager { display: flex; gap: 0.25rem; list-style: none; padding: 0; }
+.pager li a, .pager li span {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--tblr-border-color, #dadfe5);
+  border-radius: var(--tblr-border-radius, 4px);
+}
+.pager li.pager-current span { background: var(--tblr-primary, #206bc4); color: #fff; }
+
+/* Node, comment, user, block */
+.node.card, .comment.card, .profile.card { margin-bottom: 1.5rem; }
+.block { margin-bottom: 1rem; }
+.block-title { margin-bottom: 0.5rem; }
+
+/* Page chrome */
+.l-header, .l-navbar, header.l-header {
+  background: var(--tblr-bg-surface, #1a1d23);
+  border-bottom: 1px solid var(--tblr-border-color, #2c3038);
+  padding: 0.75rem 1rem;
+}
+.l-header a, .site-name a { color: inherit; text-decoration: none; }
+.site-name { font-size: 1.25rem; font-weight: 600; margin: 0; }
+
+/* Menu */
+ul.menu, .menu { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+ul.menu li a, .menu li a {
+  display: block;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--tblr-border-radius, 4px);
+  color: inherit;
+  text-decoration: none;
+}
+ul.menu li a:hover, .menu li a:hover { background: var(--tblr-bg-surface-secondary, #2c3038); }
+ul.menu li.active a, .menu li.active a { background: var(--tblr-primary, #206bc4); color: #fff; }
+
+/* Content area */
+.l-content, .l-main, main, .page-body { padding: 1.5rem 0; }
+.l-content > .block, .l-main > .block { margin-bottom: 1.5rem; }
+
+/* Cards from nodes and blocks */
+.node, .block, .view {
+  background: var(--tblr-bg-surface, #1e2228);
+  border: 1px solid var(--tblr-border-color, #2c3038);
+  border-radius: var(--tblr-border-radius, 4px);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.node h2, .block-title, .view .card-title { margin-top: 0; }
+
+/* Links */
+a { color: var(--tblr-primary, #206bc4); }
+a:hover { text-decoration: underline; }
+
+/* Search form */
+.block-search form, #search-block-form { display: flex; gap: 0.5rem; align-items: center; }
+.block-search .form-text { flex: 1; }
+
+/* Tabler layout structure */
+.tabler-page { display: flex; min-height: 100vh; }
+.tabler-sidebar,
+.navbar-vertical {
+  width: 15rem;
+  flex-shrink: 0;
+  background: var(--tblr-bg-surface, #1a1d23);
+  border-right: 1px solid var(--tblr-border-color, #2c3038);
+  display: flex;
+  flex-direction: column;
+}
+.tabler-sidebar .navbar-nav,
+.navbar-vertical .navbar-nav,
+.tabler-sidebar .menu,
+.navbar-vertical .menu {
+  flex-direction: column;
+  width: 100%;
+}
+.tabler-sidebar .menu li a,
+.navbar-vertical .menu li a {
+  display: block;
+  padding: 0.5rem 1rem;
+}
+.page-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.page-body { flex: 1; }
+.tabler-content-sidebar { width: 18rem; }
+
+/* Header: one bar, site name and menu together */
+.navbar { background: var(--tblr-bg-surface, #1a1d23); border-bottom: 1px solid var(--tblr-border-color, #2c3038); }
+.navbar-brand { font-size: 1.25rem; font-weight: 600; margin: 0; }
+.navbar-brand a { color: inherit; text-decoration: none; }
+.navbar-nav .menu { display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0; }
+.navbar-nav .menu li a { display: block; padding: 0.5rem 0.75rem; color: inherit; text-decoration: none; border-radius: var(--tblr-border-radius, 4px); }
+.navbar-nav .menu li a:hover { background: var(--tblr-bg-surface-secondary, #2c3038); }
+
+/* Cards: one card, image on top, no nesting */
+.page-body .node, .page-body .block, .page-body .view {
+  background: var(--tblr-bg-surface, #1e2228);
+  border: 1px solid var(--tblr-border-color, #2c3038);
+  border-radius: var(--tblr-border-radius, 4px);
+  padding: 0;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.page-body .node img, .page-body .view img { width: 100%; height: auto; display: block; }
+.page-body .node .content, .page-body .node .node-content { padding: 1.25rem; }
+.page-body .node h2, .page-body .view h2 { margin-top: 0; padding: 0 1.25rem; }
+.page-body .node p { padding: 0 1.25rem; }
+
+/* Footer */
+.footer { padding: 2rem 0; border-top: 1px solid var(--tblr-border-color, #2c3038); margin-top: 2rem; }
+
+/* Radius token: map data-bs-theme-radius to the Tabler radius variable. */
+[data-bs-theme-radius="0"] { --tblr-border-radius: 0; }
+[data-bs-theme-radius="0.5"] { --tblr-border-radius: 0.25rem; }
+[data-bs-theme-radius="1"] { --tblr-border-radius: 4px; }
+[data-bs-theme-radius="1.5"] { --tblr-border-radius: 0.5rem; }
+
+/* Light mode: neutral fallbacks when the CDN CSS does not load or cover these. */
+[data-bs-theme="light"] .tabler-sidebar,
+[data-bs-theme="light"] .navbar-vertical,
+[data-bs-theme="light"] .l-header,
+[data-bs-theme="light"] .navbar { background: var(--tblr-bg-surface, #fff); border-color: var(--tblr-border-color, #dadfe5); }
+
+/* Extended form controls: labels, help text, error states, fieldsets. */
+.form-item .form-label, .form-item > label { display: inline-block; margin-bottom: 0.375rem; font-weight: 600; }
+.form-item .description { font-size: 0.875rem; color: var(--tblr-secondary-color, #6c757d); margin-top: 0.25rem; }
+.form-item input.error, .form-item textarea.error, .form-item select.error { border-color: var(--tblr-danger, #d63939); }
+.form-checkboxes label, .form-radios label { font-weight: 400; display: block; }
+fieldset { border: 1px solid var(--tblr-border-color, #dadfe5); border-radius: var(--tblr-border-radius, 4px); padding: 1rem; margin-bottom: 1rem; }
+legend { font-weight: 600; padding: 0 0.5rem; }
+.form-actions { margin-top: 1rem; }
+a.button { text-decoration: none; }
+.button--danger, .button-danger { background: var(--tblr-danger, #d63939); }
