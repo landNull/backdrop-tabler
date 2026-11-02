@@ -5,6 +5,7 @@ backdrop = 1.x
 version = 1.0.0
 
 regions[header] = Header
+regions[top] = Top
 regions[navigation] = Navigation
 regions[content] = Content
 regions[sidebar] = Sidebar

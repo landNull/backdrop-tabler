@@ -31,6 +31,13 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
   </header>
 
   <div class="page-wrapper">
+    <?php if (!empty($content['top'])): ?>
+      <div class="page-top">
+        <div class="container-xl">
+          <?php print $content['top']; ?>
+        </div>
+      </div>
+    <?php endif; ?>
     <div class="page-body">
       <div class="container-xl">
         <?php if (!empty($content['content'])): ?>
