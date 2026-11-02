@@ -109,3 +109,28 @@ a:hover { text-decoration: underline; }
   padding: 1.25rem;
   margin-bottom: 1rem;
 }
+
+/* Header: one bar, site name and menu together */
+.navbar { background: var(--tblr-bg-surface, #1a1d23); border-bottom: 1px solid var(--tblr-border-color, #2c3038); }
+.navbar-brand { font-size: 1.25rem; font-weight: 600; margin: 0; }
+.navbar-brand a { color: inherit; text-decoration: none; }
+.navbar-nav .menu { display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0; }
+.navbar-nav .menu li a { display: block; padding: 0.5rem 0.75rem; color: inherit; text-decoration: none; border-radius: var(--tblr-border-radius, 4px); }
+.navbar-nav .menu li a:hover { background: var(--tblr-bg-surface-secondary, #2c3038); }
+
+/* Cards: one card, image on top, no nesting */
+.page-body .node, .page-body .block, .page-body .view {
+  background: var(--tblr-bg-surface, #1e2228);
+  border: 1px solid var(--tblr-border-color, #2c3038);
+  border-radius: var(--tblr-border-radius, 4px);
+  padding: 0;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.page-body .node img, .page-body .view img { width: 100%; height: auto; display: block; }
+.page-body .node .content, .page-body .node .node-content { padding: 1.25rem; }
+.page-body .node h2, .page-body .view h2 { margin-top: 0; padding: 0 1.25rem; }
+.page-body .node p { padding: 0 1.25rem; }
+
+/* Footer */
+.footer { padding: 2rem 0; border-top: 1px solid var(--tblr-border-color, #2c3038); margin-top: 2rem; }
