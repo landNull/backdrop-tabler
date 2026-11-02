@@ -87,6 +87,6 @@ Set `debug = 1` on the theme settings page (or `andro theme set @site debug 1`):
 
 ## Tests
 
-`php tests/run_tests.php` runs a standalone harness (no Backdrop install needed): it stubs the Backdrop API, loads `template.php`/`theme-settings.php`, and asserts the behavior of every theme hook plus `php -l`/`node --check` on all shipped files and a PHPCS coding-standard lint. Exit code 0 = green.
+`php tests/run_tests.php` runs a standalone harness (no Backdrop install needed): it stubs the Backdrop API, loads `template.php`/`theme-settings.php`, and asserts the behavior of every theme hook, renders every template, checks CSS sanity, verifies `backdrop-tabler.bundle`, checks function-name uniqueness, settings-key coverage against `tabler.info`, and layout-region coverage, plus `php -l`/`node --check`/PHPCS lint. Exit code 0 = green.
 
 Coding-standard lint uses `phpcs.xml.dist` (PSR-12 based, Backdrop brace style allowed; pure-PHP files only — `.tpl.php` files are covered by `php -l`). Point the `PHPCS` env var at a phpcs phar to enable it inside the harness. Auto-fix formatting with `phpcbf --standard=phpcs.xml.dist template.php theme-settings.php tests/`.

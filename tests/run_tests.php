@@ -135,7 +135,7 @@ function backdrop_render($element)
 }
 function render($el)
 {
-    return '';
+    return is_string($el) ? $el : '';
 }
 function hide(&$el)
 {
@@ -755,6 +755,186 @@ if (file_exists($phpcs)) {
 } else {
     echo "skip - phpcs phar not found (set PHPCS env var to enable)\n";
 }
+
+/* ---------------------------------------------------------------------------
+ * 14. Render smoke tests for the remaining templates
+ * ------------------------------------------------------------------------- */
+
+echo "\n== render remaining templates ==\n";
+
+function backdrop_get_html_head()
+{
+    return '';
+}
+function backdrop_get_css()
+{
+    return '';
+}
+function backdrop_get_js($scope = 'header')
+{
+    return '';
+}
+
+// page.tpl.php
+$html_attributes = array('data-bs-theme' => 'auto');
+$head_title = 'Test';
+$classes = array('front');
+$body_attributes = array();
+$page = 'PAGE';
+$page_bottom = '';
+ob_start();
+include $THEME_ROOT . '/templates/page.tpl.php';
+$out = ob_get_clean();
+contains($out, '<!DOCTYPE html>', 'page shell has doctype');
+contains($out, 'data-bs-theme="auto"', 'page shell prints html attributes');
+contains($out, 'PAGE', 'page shell prints page region');
+
+// block.tpl.php
+$classes = array('block');
+$attributes = array();
+$title_prefix = array();
+$title = 'My block';
+$title_suffix = array();
+$content = 'CONTENT';
+ob_start();
+include $THEME_ROOT . '/templates/block.tpl.php';
+$out = ob_get_clean();
+contains($out, 'block-title', 'block prints title');
+contains($out, 'CONTENT', 'block prints content');
+
+// user-profile.tpl.php
+$attributes = array();
+$user_profile = array();
+ob_start();
+include $THEME_ROOT . '/templates/user-profile.tpl.php';
+$out = ob_get_clean();
+contains($out, 'profile card', 'user profile renders as card');
+
+// views-view.tpl.php
+$classes = array('view');
+$title_prefix = array();
+$title = 'V';
+$title_suffix = array();
+$header = 'H';
+$exposed = 'E';
+$attachment_before = '';
+$rows = 'ROWS';
+$empty = '';
+$pager = '';
+$attachment_after = '';
+$more = '';
+$footer = 'F';
+$feed_icon = '';
+ob_start();
+include $THEME_ROOT . '/templates/views-view.tpl.php';
+$out = ob_get_clean();
+contains($out, 'card', 'view renders as card');
+contains($out, 'view-content', 'view content wrapper');
+contains($out, 'ROWS', 'view rows printed');
+
+// views-view-table.tpl.php
+$classes = array();
+$attributes = array();
+$title = 'T';
+$caption = '';
+$header = array('f1' => 'Field');
+$header_classes = array('f1' => array());
+$rows = array(array('f1' => 'cell'));
+$row_classes = array(0 => array());
+$field_classes = array('f1' => array(0 => array()));
+$field_attributes = array('f1' => array(0 => array()));
+ob_start();
+include $THEME_ROOT . '/templates/views-view-table.tpl.php';
+$out = ob_get_clean();
+contains($out, 'table table-vcenter card-table', 'views table has Tabler table classes');
+contains($out, 'cell', 'views table prints cells');
+
+// Standalone layout.
+$content = array('header' => 'H', 'navigation' => 'N', 'top' => '', 'content' => 'C', 'sidebar' => '', 'footer' => '');
+$container_class = 'container-fluid';
+$user_menu = '';
+ob_start();
+include $THEME_ROOT . '/layouts-standalone/tabler/layout--tabler.tpl.php';
+$out = ob_get_clean();
+contains($out, 'navbar-vertical', 'standalone layout renders sidebar');
+contains($out, 'container-fluid', 'standalone layout uses container_class');
+
+/* ---------------------------------------------------------------------------
+ * 15. CSS sanity
+ * ------------------------------------------------------------------------- */
+
+echo "\n== css sanity ==\n";
+
+$css_text = file_get_contents($THEME_ROOT . '/css/tabler.css');
+is(substr_count($css_text, '{'), substr_count($css_text, '}'), 'css braces balanced');
+ok(strpos($css_text, '<<<<<<<') === false, 'css has no merge conflict markers');
+ok(strpos($css_text, "\t") === false, 'css uses spaces, no tabs');
+
+/* ---------------------------------------------------------------------------
+ * 16. Git bundle integrity
+ * ------------------------------------------------------------------------- */
+
+echo "\n== bundle ==\n";
+
+$out = shell_exec('git -C ' . escapeshellarg($THEME_ROOT) . ' bundle verify ' . escapeshellarg($THEME_ROOT . '/backdrop-tabler.bundle') . ' 2>&1');
+contains($out, 'is okay', 'backdrop-tabler.bundle verifies');
+
+/* ---------------------------------------------------------------------------
+ * 17. No duplicate function names across theme PHP files
+ * ------------------------------------------------------------------------- */
+
+echo "\n== function uniqueness ==\n";
+
+$funcs = array();
+foreach (array('template.php', 'theme-settings.php') as $f) {
+    $tokens = token_get_all(file_get_contents($THEME_ROOT . '/' . $f));
+    foreach ($tokens as $i => $t) {
+        if (is_array($t) && $t[0] === T_FUNCTION) {
+            for ($j = $i + 1; $j < count($tokens); $j++) {
+                if (is_array($tokens[$j]) && $tokens[$j][0] === T_WHITESPACE) {
+                    continue;
+                }
+                if (is_array($tokens[$j]) && $tokens[$j][0] === T_STRING) {
+                    $funcs[$tokens[$j][1]][] = $f;
+                }
+                break;
+            }
+        }
+    }
+}
+$dupes = array_filter($funcs, function ($v) {
+    return count($v) > 1;
+});
+is($dupes, array(), 'no duplicate function names across theme php files');
+
+/* ---------------------------------------------------------------------------
+ * 18. Every theme_get_setting() key has a tabler.info default
+ * ------------------------------------------------------------------------- */
+
+echo "\n== settings key coverage ==\n";
+
+$used = array();
+foreach (array('template.php', 'theme-settings.php', 'layouts/tabler/layout--tabler.tpl.php', 'layouts-standalone/tabler/layout--tabler.tpl.php') as $f) {
+    preg_match_all("/theme_get_setting\(\s*'([^']+)'/", file_get_contents($THEME_ROOT . '/' . $f), $m);
+    $used = array_merge($used, $m[1]);
+}
+$used = array_unique($used);
+$missing = array_diff($used, array_keys($info_settings));
+is(array_values($missing), array(), 'every theme_get_setting key has an info default (missing: ' . implode(',', $missing) . ')');
+
+/* ---------------------------------------------------------------------------
+ * 19. Layout regions are all declared in tabler.info
+ * ------------------------------------------------------------------------- */
+
+echo "\n== region coverage ==\n";
+
+preg_match_all('/^regions\[([^\]]+)\]/m', $info_text, $rm);
+$declared = $rm[1];
+$layout_text = file_get_contents($THEME_ROOT . '/layouts/tabler/layout--tabler.tpl.php');
+preg_match_all("/\\\$content\['([^']+)'\]/", $layout_text, $um);
+$used_regions = array_unique($um[1]);
+$undeclared = array_diff($used_regions, $declared);
+is(array_values($undeclared), array(), 'layout regions all declared in tabler.info (undeclared: ' . implode(',', $undeclared) . ')');
 
 /* ------------------------------------------------------------------------- */
 

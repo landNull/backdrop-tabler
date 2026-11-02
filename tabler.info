@@ -25,6 +25,7 @@ settings[tabler_debug] = 0
 
 regions[header] = Header
 regions[navigation] = Navigation
+regions[top] = Top
 regions[highlighted] = Highlighted
 regions[help] = Help
 regions[content] = Content
