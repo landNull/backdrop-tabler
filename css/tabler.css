@@ -120,15 +120,6 @@ a:hover { text-decoration: underline; }
 .page-body { flex: 1; }
 .tabler-content-sidebar { width: 18rem; }
 
-/* Cards in content */
-.page-body .node, .page-body .block, .page-body .view {
-  background: var(--tblr-bg-surface, #1e2228);
-  border: 1px solid var(--tblr-border-color, #2c3038);
-  border-radius: var(--tblr-border-radius, 4px);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-}
-
 /* Header: one bar, site name and menu together */
 .navbar { background: var(--tblr-bg-surface, #1a1d23); border-bottom: 1px solid var(--tblr-border-color, #2c3038); }
 .navbar-brand { font-size: 1.25rem; font-weight: 600; margin: 0; }
@@ -153,3 +144,26 @@ a:hover { text-decoration: underline; }
 
 /* Footer */
 .footer { padding: 2rem 0; border-top: 1px solid var(--tblr-border-color, #2c3038); margin-top: 2rem; }
+
+/* Radius token: map data-bs-theme-radius to the Tabler radius variable. */
+[data-bs-theme-radius="0"] { --tblr-border-radius: 0; }
+[data-bs-theme-radius="0.5"] { --tblr-border-radius: 0.25rem; }
+[data-bs-theme-radius="1"] { --tblr-border-radius: 4px; }
+[data-bs-theme-radius="1.5"] { --tblr-border-radius: 0.5rem; }
+
+/* Light mode: neutral fallbacks when the CDN CSS does not load or cover these. */
+[data-bs-theme="light"] .tabler-sidebar,
+[data-bs-theme="light"] .navbar-vertical,
+[data-bs-theme="light"] .l-header,
+[data-bs-theme="light"] .navbar { background: var(--tblr-bg-surface, #fff); border-color: var(--tblr-border-color, #dadfe5); }
+
+/* Extended form controls: labels, help text, error states, fieldsets. */
+.form-item .form-label, .form-item > label { display: inline-block; margin-bottom: 0.375rem; font-weight: 600; }
+.form-item .description { font-size: 0.875rem; color: var(--tblr-secondary-color, #6c757d); margin-top: 0.25rem; }
+.form-item input.error, .form-item textarea.error, .form-item select.error { border-color: var(--tblr-danger, #d63939); }
+.form-checkboxes label, .form-radios label { font-weight: 400; display: block; }
+fieldset { border: 1px solid var(--tblr-border-color, #dadfe5); border-radius: var(--tblr-border-radius, 4px); padding: 1rem; margin-bottom: 1rem; }
+legend { font-weight: 600; padding: 0 0.5rem; }
+.form-actions { margin-top: 1rem; }
+a.button { text-decoration: none; }
+.button--danger, .button-danger { background: var(--tblr-danger, #d63939); }
