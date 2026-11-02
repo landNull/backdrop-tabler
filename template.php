@@ -322,15 +322,10 @@ function tabler_button($variables) {
     $default = TRUE;
     foreach ($element['#attributes']['class'] as $key => $class) {
       if (FALSE !== strpos($class, 'secondary')) {
-        if (isset($element['#id']) && $element['#id'] == 'edit-delete') {
-          $element['#attributes']['class'][$key] = 'btn-danger';
-        }
-        else {
-          $element['#attributes']['class'][$key] = str_replace('secondary', 'btn-secondary', $class);
-        }
+        $element['#attributes']['class'][$key] = (isset($element['#id']) && $element['#id'] == 'edit-delete') ? 'btn-danger' : 'btn-secondary';
         $default = FALSE;
       }
-      if (FALSE !== strpos($class, 'button')) {
+      elseif (FALSE !== strpos($class, 'button')) {
         $element['#attributes']['class'][$key] = str_replace('button', 'btn', $class);
         $default = FALSE;
       }

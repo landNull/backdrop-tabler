@@ -79,3 +79,7 @@ Content images live in the site files directory. They are not theme-owned. Image
 ## Cache
 
 Devel and test run with cache off. Live runs with cache on. `stage_health` checks this.
+
+## Tests
+
+`php tests/run_tests.php` runs a standalone harness (no Backdrop install needed): it stubs the Backdrop API, loads `template.php`/`theme-settings.php`, and asserts the behavior of every theme hook plus `php -l`/`node --check` on all shipped files. Exit code 0 = green.

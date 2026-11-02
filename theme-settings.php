@@ -56,10 +56,14 @@ function tabler_form_system_theme_settings_alter(&$form, &$form_state) {
   // Version: prefer the live list from the jsDelivr API; fall back to a
   // textfield when the server cannot reach it.
   $versions = array();
+  $current_version = theme_get_setting('tabler_version', $theme_name);
   $request = backdrop_http_request('https://data.jsdelivr.com/v1/packages/npm/@tabler/core', array('timeout' => 3));
   if ($request && $request->code == 200 && !empty($request->data)) {
     $api = backdrop_json_decode($request->data);
     if (!empty($api['versions']) && is_array($api['versions'])) {
+      if ($current_version) {
+        $versions[$current_version] = $current_version;
+      }
       foreach (array_reverse($api['versions']) as $v) {
         if (isset($v['version']) && strpos($v['version'], '-') === FALSE) {
           $versions[$v['version']] = $v['version'];
@@ -69,10 +73,6 @@ function tabler_form_system_theme_settings_alter(&$form, &$form_state) {
         }
       }
     }
-  }
-  $current_version = theme_get_setting('tabler_version', $theme_name);
-  if ($current_version) {
-    $versions = array($current_version => $current_version) + $versions;
   }
   if ($versions) {
     $form['tabler_framework']['tabler_version'] = array(
