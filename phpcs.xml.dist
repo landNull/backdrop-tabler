@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="backdrop-tabler">
+  <description>PSR-12 based lint for the pure-PHP files of the Tabler theme, relaxed for Backdrop/Drupal brace style. Run: phpcs --standard=phpcs.xml.dist template.php theme-settings.php tests/ ; auto-fix: phpcbf --standard=phpcs.xml.dist ...</description>
+
+  <rule ref="PSR12">
+    <!-- Backdrop/Drupal style: opening brace on the same line for functions and classes. -->
+    <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+    <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
+    <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
+    <!-- Mixed HTML/PHP template files are linted with php -l in the test harness instead. -->
+  </rule>
+
+  <file>template.php</file>
+  <file>theme-settings.php</file>
+  <file>tests</file>
+
+  <!-- Only errors fail the build; line-length etc. stay warnings. -->
+  <arg name="warning-severity" value="0"/>
+  <arg name="extensions" value="php"/>
+</ruleset>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Standalone test harness for the Tabler theme. No Backdrop install needed:
@@ -22,125 +23,256 @@ $THEME_ROOT = dirname(__DIR__);
  * ------------------------------------------------------------------------- */
 
 $GLOBALS['SETTINGS'] = array();
-$GLOBALS['HTTP_RESPONSE'] = NULL;
+$GLOBALS['HTTP_RESPONSE'] = null;
 $GLOBALS['REQUEST_PATH'] = '';
 $GLOBALS['PAGE_TITLE'] = '';
 $GLOBALS['MENU_ITEM'] = array();
-$GLOBALS['CAPTURE'] = NULL;
+$GLOBALS['CAPTURE'] = null;
 $GLOBALS['user'] = (object) array('roles' => array(2 => 'authenticated user'));
 
-function theme_get_setting($key, $theme = NULL) {
-  return isset($GLOBALS['SETTINGS'][$key]) ? $GLOBALS['SETTINGS'][$key] : NULL;
+function theme_get_setting($key, $theme = null)
+{
+    return isset($GLOBALS['SETTINGS'][$key]) ? $GLOBALS['SETTINGS'][$key] : null;
 }
-function set_settings(array $s) { $GLOBALS['SETTINGS'] = $s; }
-function backdrop_get_path($type, $name) {
-  global $THEME_ROOT;
-  return $type === 'theme' && $name === 'tabler' ? $THEME_ROOT : 'themes/' . $name;
+function set_settings(array $s)
+{
+    $GLOBALS['SETTINGS'] = $s;
 }
-function backdrop_attributes($attrs) {
-  $out = '';
-  foreach ((array) $attrs as $k => $v) {
-    if (is_array($v)) { $v = implode(' ', $v); }
-    $out .= ' ' . $k . '="' . check_plain($v) . '"';
-  }
-  return $out;
+function backdrop_get_path($type, $name)
+{
+    global $THEME_ROOT;
+    return $type === 'theme' && $name === 'tabler' ? $THEME_ROOT : 'themes/' . $name;
 }
-function check_plain($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); }
-function t($s, $args = array()) {
-  foreach ($args as $k => $v) {
-    $v = (string) $v;
-    if (isset($k[0]) && $k[0] === '@') { $v = check_plain($v); }
-    $s = str_replace($k, $v, $s);
-  }
-  return $s;
+function backdrop_attributes($attrs)
+{
+    $out = '';
+    foreach ((array) $attrs as $k => $v) {
+        if (is_array($v)) {
+            $v = implode(' ', $v);
+        }
+        $out .= ' ' . $k . '="' . check_plain($v) . '"';
+    }
+    return $out;
 }
-function backdrop_clean_css_identifier($s) {
-  return trim(preg_replace('/[^a-z0-9-]+/', '-', strtolower($s)), '-');
+function check_plain($s)
+{
+    return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
 }
-function request_path() { return $GLOBALS['REQUEST_PATH']; }
-function backdrop_get_normal_path($p) { return $p; }
-function backdrop_get_title() { return $GLOBALS['PAGE_TITLE']; }
-function menu_get_item() { return $GLOBALS['MENU_ITEM']; }
-function menu_tree($menu_name) { $GLOBALS['CAPTURE'] = 'menu_tree:' . $menu_name; return 'TREE(' . $menu_name . ')'; }
-function menu_navigation_links($menu_name) {
-  return array(
+function t($s, $args = array())
+{
+    foreach ($args as $k => $v) {
+        $v = (string) $v;
+        if (isset($k[0]) && $k[0] === '@') {
+            $v = check_plain($v);
+        }
+        $s = str_replace($k, $v, $s);
+    }
+    return $s;
+}
+function backdrop_clean_css_identifier($s)
+{
+    return trim(preg_replace('/[^a-z0-9-]+/', '-', strtolower($s)), '-');
+}
+function request_path()
+{
+    return $GLOBALS['REQUEST_PATH'];
+}
+function backdrop_get_normal_path($p)
+{
+    return $p;
+}
+function backdrop_get_title()
+{
+    return $GLOBALS['PAGE_TITLE'];
+}
+function menu_get_item()
+{
+    return $GLOBALS['MENU_ITEM'];
+}
+function menu_tree($menu_name)
+{
+    $GLOBALS['CAPTURE'] = 'menu_tree:' . $menu_name;
+    return 'TREE(' . $menu_name . ')';
+}
+function menu_navigation_links($menu_name)
+{
+    return array(
     'user/' => array('title' => 'My account', 'href' => 'user', 'localized_options' => array('attributes' => array())),
     'user/logout' => array('title' => 'Log out', 'href' => 'user/logout', 'localized_options' => array('attributes' => array())),
-  );
+    );
 }
-function theme_links($menu) {
-  $link_classes = array();
-  foreach ($menu['links'] as $l) { $link_classes[] = implode(' ', isset($l['attributes']['class']) ? $l['attributes']['class'] : array()); }
-  return 'LINKS[' . implode(' ', isset($menu['attributes']['class']) ? $menu['attributes']['class'] : array()) . '|' . implode(',', $link_classes) . ']';
+function theme_links($menu)
+{
+    $link_classes = array();
+    foreach ($menu['links'] as $l) {
+        $link_classes[] = implode(' ', isset($l['attributes']['class']) ? $l['attributes']['class'] : array());
+    }
+    return 'LINKS[' . implode(' ', isset($menu['attributes']['class']) ? $menu['attributes']['class'] : array()) . '|' . implode(',', $link_classes) . ']';
 }
-function theme_menu_tree($variables) { return 'DEFAULT-TREE'; }
+function theme_menu_tree($variables)
+{
+    return 'DEFAULT-TREE';
+}
 // Minimal theme() dispatcher: theme overrides (tabler_*) win, then fallbacks.
-function theme($hook, $vars = array()) {
-  if (function_exists('tabler_' . $hook)) { return call_user_func('tabler_' . $hook, $vars); }
-  if ($hook === 'links__user_menu') { return theme_links($vars); }
-  $fn = 'theme_' . $hook;
-  if (function_exists($fn)) { return $fn($vars); }
-  return '';
+function theme($hook, $vars = array())
+{
+    if (function_exists('tabler_' . $hook)) {
+        return call_user_func('tabler_' . $hook, $vars);
+    }
+    if ($hook === 'links__user_menu') {
+        return theme_links($vars);
+    }
+    $fn = 'theme_' . $hook;
+    if (function_exists($fn)) {
+        return $fn($vars);
+    }
+    return '';
 }
-function backdrop_render($element) {
-  $GLOBALS['CAPTURE'] = $element;
-  return (isset($element['#prefix']) ? $element['#prefix'] : '') . 'RENDER' . (isset($element['#suffix']) ? $element['#suffix'] : '');
+function backdrop_render($element)
+{
+    $GLOBALS['CAPTURE'] = $element;
+    return (isset($element['#prefix']) ? $element['#prefix'] : '') . 'RENDER' . (isset($element['#suffix']) ? $element['#suffix'] : '');
 }
-function render($el) { return ''; }
-function hide(&$el) { $el = array(); }
-function l($title, $path, $options = array()) { return '<a href="/' . $path . '">' . $title . '</a>'; }
-function url($path) { return '/' . $path; }
-function filter_xss_admin($s) { return strip_tags($s); }
-function format_interval($s) { return $s . ' units'; }
-function element_set_attributes(&$element, $attrs) { foreach ($attrs as $a) { if (isset($element['#' . $a])) { $element['#attributes'][$a] = $element['#' . $a]; } } }
-function _form_set_class(&$element, $class) { foreach ((array) $class as $c) { $element['#attributes']['class'][] = $c; } }
-function backdrop_js_defaults($data = NULL) {
-  return array('type' => 'file', 'group' => JS_DEFAULT, 'every_page' => FALSE, 'weight' => 0, 'scope' => 'header', 'cache' => TRUE, 'defer' => FALSE, 'preprocess' => TRUE, 'version' => NULL, 'data' => $data, 'attributes' => array());
+function render($el)
+{
+    return '';
 }
-function backdrop_http_request($url, $options = array()) {
-  return $GLOBALS['HTTP_RESPONSE'] ?: (object) array('code' => 0, 'error' => 'offline', 'data' => NULL);
+function hide(&$el)
+{
+    $el = array();
 }
-function config_get($name, $key) {
-  return isset($GLOBALS['CONFIG'][$name][$key]) ? $GLOBALS['CONFIG'][$name][$key] : NULL;
+function l($title, $path, $options = array())
+{
+    return '<a href="/' . $path . '">' . $title . '</a>';
 }
-function backdrop_json_decode($s) { return json_decode($s, TRUE); }
-function backdrop_add_css($p, $o = array()) {}
-function backdrop_add_js($p, $o = array()) {}
+function url($path)
+{
+    return '/' . $path;
+}
+function filter_xss_admin($s)
+{
+    return strip_tags($s);
+}
+function format_interval($s)
+{
+    return $s . ' units';
+}
+function element_set_attributes(&$element, $attrs)
+{
+    foreach ($attrs as $a) {
+        if (isset($element['#' . $a])) {
+            $element['#attributes'][$a] = $element['#' . $a];
+        }
+    }
+}
+function _form_set_class(&$element, $class)
+{
+    foreach ((array) $class as $c) {
+        $element['#attributes']['class'][] = $c;
+    }
+}
+function backdrop_js_defaults($data = null)
+{
+    return array('type' => 'file', 'group' => JS_DEFAULT, 'every_page' => false, 'weight' => 0, 'scope' => 'header', 'cache' => true, 'defer' => false, 'preprocess' => true, 'version' => null, 'data' => $data, 'attributes' => array());
+}
+function backdrop_http_request($url, $options = array())
+{
+    return $GLOBALS['HTTP_RESPONSE'] ?: (object) array('code' => 0, 'error' => 'offline', 'data' => null);
+}
+function config_get($name, $key)
+{
+    return isset($GLOBALS['CONFIG'][$name][$key]) ? $GLOBALS['CONFIG'][$name][$key] : null;
+}
+function backdrop_json_decode($s)
+{
+    return json_decode($s, true);
+}
+function backdrop_add_css($p, $o = array())
+{
+}
+function backdrop_add_js($p, $o = array())
+{
+}
 
 // Theme-function fallbacks the overrides delegate to.
-function _el_classes($variables) { return 'EL{' . implode('|', isset($variables['element']['#attributes']['class']) ? $variables['element']['#attributes']['class'] : array()) . '}'; }
-function theme_button($v) { return _el_classes($v); }
-function theme_textfield($v) { return _el_classes($v); }
-function theme_email($v) { return _el_classes($v); }
-function theme_webform_email($v) { return _el_classes($v); }
-function theme_password($v) { return _el_classes($v); }
-function theme_search($v) { return _el_classes($v); }
-function theme_textarea($v) { return _el_classes($v); }
-function theme_checkbox($v) { return _el_classes($v); }
-function theme_radio($v) { return _el_classes($v); }
-function theme_select($v) { return _el_classes($v); }
-function theme_fieldset($v) { return 'DEFAULT-FIELDSET'; }
-function theme_form_element($v) {
-  return 'FORM_ELEMENT[' . implode('|', isset($v['element']['#wrapper_attributes']['class']) ? $v['element']['#wrapper_attributes']['class'] : array()) . ']';
+function _el_classes($variables)
+{
+    return 'EL{' . implode('|', isset($variables['element']['#attributes']['class']) ? $variables['element']['#attributes']['class'] : array()) . '}';
+}
+function theme_button($v)
+{
+    return _el_classes($v);
+}
+function theme_textfield($v)
+{
+    return _el_classes($v);
+}
+function theme_email($v)
+{
+    return _el_classes($v);
+}
+function theme_webform_email($v)
+{
+    return _el_classes($v);
+}
+function theme_password($v)
+{
+    return _el_classes($v);
+}
+function theme_search($v)
+{
+    return _el_classes($v);
+}
+function theme_textarea($v)
+{
+    return _el_classes($v);
+}
+function theme_checkbox($v)
+{
+    return _el_classes($v);
+}
+function theme_radio($v)
+{
+    return _el_classes($v);
+}
+function theme_select($v)
+{
+    return _el_classes($v);
+}
+function theme_fieldset($v)
+{
+    return 'DEFAULT-FIELDSET';
+}
+function theme_form_element($v)
+{
+    return 'FORM_ELEMENT[' . implode('|', isset($v['element']['#wrapper_attributes']['class']) ? $v['element']['#wrapper_attributes']['class'] : array()) . ']';
 }
 
 /* ---------------------------------------------------------------------------
  * Tiny assertion framework
  * ------------------------------------------------------------------------- */
 
-$TESTS = 0; $FAILS = 0;
-function ok($cond, $msg) {
-  global $TESTS, $FAILS;
-  $TESTS++;
-  if ($cond) { echo "ok   - $msg\n"; }
-  else { $FAILS++; echo "FAIL - $msg\n"; }
+$TESTS = 0;
+$FAILS = 0;
+function ok($cond, $msg)
+{
+    global $TESTS, $FAILS;
+    $TESTS++;
+    if ($cond) {
+        echo "ok   - $msg\n";
+    } else {
+        $FAILS++;
+        echo "FAIL - $msg\n";
+    }
 }
-function is($got, $want, $msg) {
-  ok($got === $want, $msg . ' (want ' . var_export($want, TRUE) . ', got ' . var_export($got, TRUE) . ')');
+function is($got, $want, $msg)
+{
+    ok($got === $want, $msg . ' (want ' . var_export($want, true) . ', got ' . var_export($got, true) . ')');
 }
-function contains($hay, $needle, $msg) {
-  $found = is_string($hay) && strpos($hay, $needle) !== FALSE;
-  ok($found, $msg . ($found ? '' : ' (missing ' . var_export($needle, TRUE) . ' in ' . var_export(substr((string) $hay, 0, 200), TRUE) . ')'));
+function contains($hay, $needle, $msg)
+{
+    $found = is_string($hay) && strpos($hay, $needle) !== false;
+    ok($found, $msg . ($found ? '' : ' (missing ' . var_export($needle, true) . ' in ' . var_export(substr((string) $hay, 0, 200), true) . ')'));
 }
 
 /* ---------------------------------------------------------------------------
@@ -180,7 +312,7 @@ ok(isset($css[$cdn_key]), 'css_alter adds the jsDelivr CDN css');
 is($css[$cdn_key]['type'], 'external', 'CDN css is external');
 is($css[$cdn_key]['weight'], -2, 'framework css loads before theme css (weight -2 < 0)');
 is($css[$cdn_key]['group'], CSS_THEME, 'framework css stays in CSS_THEME');
-is($css[$cdn_key]['preprocess'], FALSE, 'minified CDN css is not preprocessed');
+is($css[$cdn_key]['preprocess'], false, 'minified CDN css is not preprocessed');
 
 $js = array();
 tabler_js_alter($js);
@@ -191,23 +323,28 @@ is($js[$cdn_js]['weight'], -1, 'framework js loads before theme js (weight -1)')
 is($js[$cdn_js]['scope'], 'header', 'framework js keeps header scope');
 
 set_settings(array_merge($DEFAULTS, array('tabler_cdn' => 'module')));
-$css = array(); tabler_css_alter($css);
+$css = array();
+tabler_css_alter($css);
 $bundle_css = $THEME_ROOT . '/dist/css/tabler.min.css';
 ok(isset($css[$bundle_css]), 'bundled mode uses dist/css/tabler.min.css');
 is($css[$bundle_css]['type'], 'file', 'bundled css is a local file');
 ok(file_exists($bundle_css), 'bundled css exists on disk');
-$js = array(); tabler_js_alter($js);
+$js = array();
+tabler_js_alter($js);
 $bundle_js = $THEME_ROOT . '/dist/js/tabler.min.js';
 ok(isset($js[$bundle_js]) && file_exists($bundle_js), 'bundled js exists on disk and is used');
 
 set_settings(array_merge($DEFAULTS, array('tabler_cdn' => 0)));
-$css = array('x' => 1); tabler_css_alter($css);
+$css = array('x' => 1);
+tabler_css_alter($css);
 is(count($css), 1, 'cdn disabled: css untouched');
-$js = array('x' => 1); tabler_js_alter($js);
+$js = array('x' => 1);
+tabler_js_alter($js);
 is(count($js), 1, 'cdn disabled: js untouched');
 
 set_settings(array_merge($DEFAULTS, array('tabler_version' => '9.9.9')));
-$css = array(); tabler_css_alter($css);
+$css = array();
+tabler_css_alter($css);
 ok(isset($css['https://cdn.jsdelivr.net/npm/@tabler/core@9.9.9/dist/css/tabler.min.css']), 'version setting drives the CDN url');
 
 /* ---------------------------------------------------------------------------
@@ -218,7 +355,7 @@ echo "\n== preprocess_page ==\n";
 
 set_settings($DEFAULTS);
 $GLOBALS['REQUEST_PATH'] = 'admin/content';
-$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => FALSE);
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => false);
 tabler_preprocess_page($variables);
 is($variables['html_attributes']['data-bs-theme'], 'auto', 'data-bs-theme=auto');
 is($variables['html_attributes']['data-bs-theme-primary'], 'blue', 'data-bs-theme-primary=blue');
@@ -231,12 +368,12 @@ ok(in_array('page-admin', $variables['classes']), 'page-admin class');
 ok(in_array('page-admin-content', $variables['classes']), 'nested page-admin-content class');
 ok(in_array('role-authenticated-user', $variables['classes']), 'role class');
 
-$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => true);
 tabler_preprocess_page($variables);
 ok(!in_array('not-front', $variables['classes']), 'front page has no not-front class');
 
 set_settings(array_merge($DEFAULTS, array('tabler_mode' => 'dark', 'tabler_radius' => '0.5')));
-$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => true);
 tabler_preprocess_page($variables);
 is($variables['html_attributes']['data-bs-theme'], 'dark', 'mode setting overrides auto');
 is($variables['html_attributes']['data-bs-theme-radius'], '0.5', 'radius setting passes through');
@@ -248,18 +385,20 @@ is($variables['html_attributes']['data-bs-theme-radius'], '0.5', 'radius setting
 echo "\n== preprocess_layout ==\n";
 
 foreach (array('fluid' => 'container-fluid', 'boxed' => 'container', 'default' => 'container-xl') as $layout => $class) {
-  set_settings(array_merge($DEFAULTS, array('tabler_layout' => $layout)));
-  $variables = array();
-  tabler_preprocess_layout($variables);
-  is($variables['container_class'], $class, "layout=$layout -> $class");
+    set_settings(array_merge($DEFAULTS, array('tabler_layout' => $layout)));
+    $variables = array();
+    tabler_preprocess_layout($variables);
+    is($variables['container_class'], $class, "layout=$layout -> $class");
 }
 
 set_settings(array_merge($DEFAULTS, array('tabler_navbar_user_menu' => 0)));
-$variables = array(); tabler_preprocess_layout($variables);
+$variables = array();
+tabler_preprocess_layout($variables);
 is($variables['user_menu'], '', 'user menu off -> empty');
 
 set_settings(array_merge($DEFAULTS, array('tabler_navbar_user_menu' => 1)));
-$variables = array(); tabler_preprocess_layout($variables);
+$variables = array();
+tabler_preprocess_layout($variables);
 is($variables['user_menu'], 'TREE(user-menu)', 'user menu on -> user-menu tree rendered');
 
 /* ---------------------------------------------------------------------------
@@ -341,7 +480,7 @@ contains($out, '<div class="form-hint">Help text</div>', 'description becomes fo
 $out = tabler_button(array('element' => array('#id' => 'edit-submit', '#attributes' => array('class' => array('button', 'button-secondary')))));
 contains($out, 'btn', 'button gets btn');
 contains($out, 'btn-secondary', 'secondary maps to btn-secondary');
-ok(strpos($out, 'button') === FALSE, 'old button class replaced');
+ok(strpos($out, 'button') === false, 'old button class replaced');
 $out = tabler_button(array('element' => array('#id' => 'edit-delete', '#attributes' => array('class' => array('button-secondary')))));
 contains($out, 'btn-danger', 'delete button becomes btn-danger');
 $out = tabler_button(array('element' => array('#id' => 'edit-save', '#attributes' => array())));
@@ -351,7 +490,7 @@ $out = tabler_fieldset(array('element' => array('#title' => 'Group', '#children'
 contains($out, 'class="form-wrapper card mb-3"', 'fieldset renders as card');
 contains($out, '<legend class="card-header">', 'legend is card-header');
 contains($out, 'fieldset-wrapper card-body', 'wrapper is card-body');
-$out = tabler_fieldset(array('element' => array('#group_fieldset' => TRUE, '#attributes' => array())));
+$out = tabler_fieldset(array('element' => array('#group_fieldset' => true, '#attributes' => array())));
 is($out, 'DEFAULT-FIELDSET', 'fieldset inside vertical tabs keeps default rendering');
 
 $form = array('actions' => array('cancel' => array('#type' => 'link', '#options' => array('attributes' => array()))));
@@ -389,11 +528,11 @@ ok(!in_array('table-striped', $variables['attributes']['class']), 'table-no-stri
 
 echo "\n== admin ==\n";
 
-$out = tabler_admin_block(array('block' => array('show' => TRUE, 'title' => 'Content', 'content' => 'LIST', 'description' => '')));
+$out = tabler_admin_block(array('block' => array('show' => true, 'title' => 'Content', 'content' => 'LIST', 'description' => '')));
 contains($out, 'card mb-3', 'admin block is a card');
 contains($out, '<h3 class="card-title">Content</h3>', 'admin block title in card-header');
 contains($out, 'card-body', 'admin block content in card-body');
-is(tabler_admin_block(array('block' => array('show' => FALSE))), '', 'hidden admin block renders nothing');
+is(tabler_admin_block(array('block' => array('show' => false))), '', 'hidden admin block renders nothing');
 
 $out = tabler_node_add_list(array('content' => array(array('title' => 'Article', 'href' => 'node/add/article', 'description' => 'desc', 'localized_options' => array('attributes' => array())))));
 contains($out, 'list-group', 'node add list uses list-group');
@@ -433,16 +572,16 @@ ok(!isset($variables['timeago']), 'timeago off by default');
 echo "\n== debug mode ==\n";
 
 set_settings($DEFAULTS);
-$GLOBALS['CONFIG'] = array('system.core' => array('theme_debug' => FALSE));
+$GLOBALS['CONFIG'] = array('system.core' => array('theme_debug' => false));
 $GLOBALS['REQUEST_PATH'] = '';
-$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => true);
 tabler_preprocess_page($variables);
 ok(!in_array('tabler-debug', $variables['classes']), 'debug off: no tabler-debug class');
 ok(!isset($variables['page_bottom']), 'debug off: no debug panel');
 
 set_settings(array_merge($DEFAULTS, array('tabler_debug' => 1)));
-$GLOBALS['CONFIG'] = array('system.core' => array('theme_debug' => TRUE));
-$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+$GLOBALS['CONFIG'] = array('system.core' => array('theme_debug' => true));
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => true);
 tabler_preprocess_page($variables);
 ok(in_array('tabler-debug', $variables['classes']), 'debug on: tabler-debug body class');
 contains(isset($variables['page_bottom']) ? $variables['page_bottom'] : '', 'tabler-debug-panel', 'debug on: panel rendered');
@@ -451,7 +590,7 @@ contains($variables['page_bottom'], 'mode: auto', 'panel shows resolved mode');
 contains($variables['page_bottom'], 'theme_debug: on', 'panel shows core theme_debug state');
 
 set_settings(array_merge($DEFAULTS, array('tabler_debug' => 1, 'tabler_cdn' => 'module')));
-$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => true);
 tabler_preprocess_page($variables);
 contains($variables['page_bottom'], 'bundled dist/', 'panel shows bundled source');
 
@@ -462,7 +601,7 @@ contains($variables['page_bottom'], 'bundled dist/', 'panel shows bundled source
 echo "\n== theme settings form ==\n";
 
 set_settings($DEFAULTS);
-$GLOBALS['HTTP_RESPONSE'] = NULL; // offline
+$GLOBALS['HTTP_RESPONSE'] = null; // offline
 $form = array('theme' => array('#value' => 'tabler'));
 $form_state = array();
 tabler_form_system_theme_settings_alter($form, $form_state);
@@ -473,11 +612,13 @@ is($form['tabler_layout_group']['#group'], 'tabler_tabs', 'layout fieldset in th
 is($form['tabler_chrome']['#group'], 'tabler_tabs', 'chrome fieldset in the tab group');
 is($form['tabler_debug_group']['#group'], 'tabler_tabs', 'debug fieldset in the tab group');
 foreach (array('tabler_cdn', 'tabler_version', 'tabler_mode', 'tabler_primary', 'tabler_base', 'tabler_radius', 'tabler_layout', 'tabler_navbar', 'tabler_navbar_theme', 'tabler_navbar_user_menu', 'tabler_breadcrumb_home', 'tabler_breadcrumb_title', 'tabler_datetime', 'tabler_debug') as $key) {
-  $found = FALSE;
-  foreach (array('tabler_framework', 'tabler_appearance', 'tabler_layout_group', 'tabler_chrome', 'tabler_debug_group') as $group) {
-    if (isset($form[$group][$key])) { $found = TRUE; }
-  }
-  ok($found, "setting element present: $key");
+    $found = false;
+    foreach (array('tabler_framework', 'tabler_appearance', 'tabler_layout_group', 'tabler_chrome', 'tabler_debug_group') as $group) {
+        if (isset($form[$group][$key])) {
+            $found = true;
+        }
+    }
+    ok($found, "setting element present: $key");
 }
 is($form['tabler_framework']['tabler_version']['#type'], 'textfield', 'offline: version falls back to textfield');
 contains($form['tabler_framework']['tabler_cdn']['#options']['1'], 'CDN', 'cdn select has CDN option');
@@ -508,9 +649,11 @@ echo "\n== tabler.info ==\n";
 $info_text = file_get_contents($THEME_ROOT . '/tabler.info');
 preg_match_all('/^settings\[([^\]]+)\]\s*=\s*(.+)$/m', $info_text, $m, PREG_SET_ORDER);
 $info_settings = array();
-foreach ($m as $row) { $info_settings[$row[1]] = trim($row[2], " \t\"'"); }
+foreach ($m as $row) {
+    $info_settings[$row[1]] = trim($row[2], " \t\"'");
+}
 foreach (array('tabler_cdn', 'tabler_version', 'tabler_mode', 'tabler_navbar_user_menu', 'tabler_breadcrumb_home', 'tabler_breadcrumb_title', 'tabler_datetime', 'tabler_debug') as $key) {
-  ok(isset($info_settings[$key]), "info default: $key");
+    ok(isset($info_settings[$key]), "info default: $key");
 }
 ok(file_exists($THEME_ROOT . '/css/tabler.css') && file_exists($THEME_ROOT . '/js/tabler.js'), 'info-referenced assets exist');
 
@@ -530,7 +673,7 @@ ob_start();
 include $THEME_ROOT . '/layouts/tabler/layout--tabler.tpl.php';
 $out = ob_get_clean();
 foreach (array('tabler-sidebar', 'container-xl', 'COG', 'NAV', 'BODY', 'SIDE', 'FTR', 'page-wrapper') as $needle) {
-  contains($out, $needle, "layout renders $needle");
+    contains($out, $needle, "layout renders $needle");
 }
 
 // Node with timeago.
@@ -538,11 +681,20 @@ set_settings(array_merge($DEFAULTS, array('tabler_datetime' => 1)));
 $variables = array('elements' => array('#node' => (object) array('created' => time() - 3600)));
 tabler_preprocess_node($variables);
 $node = (object) array('nid' => 7);
-$classes = array('node'); $attributes = array(); $title_prefix = array(); $page = FALSE;
-$title = 'Hello'; $node_url = '/node/7'; $title_suffix = array();
-$display_submitted = TRUE; $user_picture = ''; $submitted = 'Submitted';
+$classes = array('node');
+$attributes = array();
+$title_prefix = array();
+$page = false;
+$title = 'Hello';
+$node_url = '/node/7';
+$title_suffix = array();
+$display_submitted = true;
+$user_picture = '';
+$submitted = 'Submitted';
 $timeago = $variables['timeago'];
-$content_attributes = array(); $content = array('links' => array()); $comments = array();
+$content_attributes = array();
+$content = array('links' => array());
+$comments = array();
 ob_start();
 include $THEME_ROOT . '/templates/node.tpl.php';
 $out = ob_get_clean();
@@ -552,15 +704,26 @@ contains($out, 'ago', 'node shows timeago');
 
 // Comment without timeago.
 set_settings($DEFAULTS);
-$classes = array('comment'); $attributes = array(); $new = ''; $title_display = FALSE;
-$title_prefix = array(); $title = ''; $title_classes = array(); $title_suffix = array();
-$user_picture = ''; $submitted = 'Submitted'; $timeago = ''; $permalink = 'P';
-$content_attributes = array(); $content = array('links' => array()); $signature = '';
+$classes = array('comment');
+$attributes = array();
+$new = '';
+$title_display = false;
+$title_prefix = array();
+$title = '';
+$title_classes = array();
+$title_suffix = array();
+$user_picture = '';
+$submitted = 'Submitted';
+$timeago = '';
+$permalink = 'P';
+$content_attributes = array();
+$content = array('links' => array());
+$signature = '';
 ob_start();
 include $THEME_ROOT . '/templates/comment.tpl.php';
 $out = ob_get_clean();
 contains($out, 'card mb-3', 'comment renders as card');
-ok(strpos($out, 'ago') === FALSE, 'comment without timeago shows no timeago');
+ok(strpos($out, 'ago') === false, 'comment without timeago shows no timeago');
 
 /* ---------------------------------------------------------------------------
  * 13. Syntax lint of every shipped php/js file
@@ -569,17 +732,28 @@ ok(strpos($out, 'ago') === FALSE, 'comment without timeago shows no timeago');
 echo "\n== lint ==\n";
 
 $php_files = array_merge(
-  array($THEME_ROOT . '/template.php', $THEME_ROOT . '/theme-settings.php'),
-  glob($THEME_ROOT . '/templates/*.tpl.php'),
-  glob($THEME_ROOT . '/layouts/*/*.tpl.php')
+    array($THEME_ROOT . '/template.php', $THEME_ROOT . '/theme-settings.php'),
+    glob($THEME_ROOT . '/templates/*.tpl.php'),
+    glob($THEME_ROOT . '/layouts/*/*.tpl.php')
 );
 foreach ($php_files as $f) {
-  $out = shell_exec('php -l ' . escapeshellarg($f) . ' 2>&1');
-  ok(strpos($out, 'No syntax errors') !== FALSE, 'php -l ' . str_replace($THEME_ROOT . '/', '', $f));
+    $out = shell_exec('php -l ' . escapeshellarg($f) . ' 2>&1');
+    ok(strpos($out, 'No syntax errors') !== false, 'php -l ' . str_replace($THEME_ROOT . '/', '', $f));
 }
 foreach (glob($THEME_ROOT . '/js/*.js') as $f) {
-  $out = shell_exec('node --check ' . escapeshellarg($f) . ' 2>&1');
-  ok($out === '' || $out === NULL, 'node --check ' . basename($f) . ($out ? " ($out)" : ''));
+    $out = shell_exec('node --check ' . escapeshellarg($f) . ' 2>&1');
+    ok($out === '' || $out === null, 'node --check ' . basename($f) . ($out ? " ($out)" : ''));
+}
+
+// Coding-standard lint (PSR-12 based, see phpcs.xml.dist). Auto-fix with:
+// phpcbf --standard=phpcs.xml.dist template.php theme-settings.php tests/
+$phpcs = getenv('PHPCS') ?: (file_exists($THEME_ROOT . '/tools/phpcs.phar') ? $THEME_ROOT . '/tools/phpcs.phar' : '/tmp/php-tools/phpcs.phar');
+if (file_exists($phpcs)) {
+    $out = shell_exec('php ' . escapeshellarg($phpcs) . ' --standard=' . escapeshellarg($THEME_ROOT . '/phpcs.xml.dist') . ' 2>&1');
+    $rc = (int) shell_exec('php ' . escapeshellarg($phpcs) . ' --standard=' . escapeshellarg($THEME_ROOT . '/phpcs.xml.dist') . ' >/dev/null 2>&1; echo $?');
+    ok($rc === 0, 'phpcs (PSR-12 based ruleset) clean' . ($rc !== 0 ? "\n" . $out : ''));
+} else {
+    echo "skip - phpcs phar not found (set PHPCS env var to enable)\n";
 }
 
 /* ------------------------------------------------------------------------- */
