@@ -15,12 +15,22 @@ function tabler_preprocess_html(&$variables) {
   $layout = theme_get_setting('tabler_layout', 'tabler');
   $navbar = theme_get_setting('tabler_navbar', 'tabler');
 
-  $variables['attributes_array']['data-bs-theme'] = $mode ? $mode : 'auto';
-  $variables['attributes_array']['data-bs-theme-primary'] = $primary ? $primary : 'blue';
-  $variables['attributes_array']['data-bs-theme-base'] = $base ? $base : 'gray';
-  $variables['attributes_array']['data-bs-theme-radius'] = $radius !== NULL ? $radius : '1';
-  $variables['attributes_array']['data-bs-layout'] = $layout ? $layout : 'fluid';
-  $variables['attributes_array']['data-bs-navbar-position'] = $navbar ? $navbar : 'vertical';
+  $attrs = array(
+    'data-bs-theme' => $mode ? $mode : 'auto',
+    'data-bs-theme-primary' => $primary ? $primary : 'blue',
+    'data-bs-theme-base' => $base ? $base : 'gray',
+    'data-bs-theme-radius' => ($radius !== NULL && $radius !== '') ? $radius : '1',
+    'data-bs-layout' => $layout ? $layout : 'fluid',
+    'data-bs-navbar-position' => $navbar ? $navbar : 'vertical',
+  );
+
+  // attributes_array is an array on some Backdrop versions and a string on others.
+  if (isset($variables['attributes_array']) && is_array($variables['attributes_array'])) {
+    $variables['attributes_array'] = array_merge($variables['attributes_array'], $attrs);
+  }
+  else {
+    $variables['tabler_attrs'] = $attrs;
+  }
 
   if (theme_get_setting('tabler_cdn', 'tabler')) {
     $ver = theme_get_setting('tabler_version', 'tabler');

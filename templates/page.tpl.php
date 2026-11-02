@@ -16,7 +16,7 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
         <a href="<?php print $front_page; ?>"><?php print $site_name; ?></a>
       </h1>
       <div class="collapse navbar-collapse" id="tabler-nav">
-        <?php if ($navigation): ?>
+        <?php if (!empty($navigation)): ?>
           <?php print render($navigation); ?>
         <?php endif; ?>
       </div>
@@ -24,7 +24,7 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
   </aside>
 
   <div class="page-wrapper">
-    <?php if ($header): ?>
+    <?php if (!empty($header)): ?>
       <header class="navbar navbar-expand-md d-print-none">
         <div class="container-xl">
           <?php print render($header); ?>
@@ -34,26 +34,28 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
 
     <div class="page-body">
       <div class="container-xl">
-        <?php if ($highlighted): ?>
+        <?php if (!empty($highlighted)): ?>
           <?php print render($highlighted); ?>
         <?php endif; ?>
-        <?php if ($help): ?>
+        <?php if (!empty($help)): ?>
           <?php print render($help); ?>
         <?php endif; ?>
-        <?php if ($messages): ?>
+        <?php if (!empty($messages)): ?>
           <div class="mb-3"><?php print $messages; ?></div>
         <?php endif; ?>
-        <?php if ($tabs): ?>
+        <?php if (!empty($tabs)): ?>
           <div class="mb-3"><?php print render($tabs); ?></div>
         <?php endif; ?>
-        <?php print render($page['content']); ?>
-        <?php if ($sidebar): ?>
+        <?php if (!empty($content)): ?>
+          <?php print render($content); ?>
+        <?php endif; ?>
+        <?php if (!empty($sidebar)): ?>
           <aside class="mt-4"><?php print render($sidebar); ?></aside>
         <?php endif; ?>
       </div>
     </div>
 
-    <?php if ($footer): ?>
+    <?php if (!empty($footer)): ?>
       <footer class="footer footer-transparent d-print-none">
         <div class="container-xl">
           <?php print render($footer); ?>
