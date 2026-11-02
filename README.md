@@ -15,7 +15,7 @@ The layout template is `layouts/tabler/layout--tabler.tpl.php`. Regions:
 | sidebar | search, recent |
 | footer | footer links |
 
-The layout must live in `layouts/tabler/` at the web root so the admin theme can see it. Theme-only layouts are invisible when the admin theme is different.
+The layout must live in `layouts/tabler/` at the web root so the admin theme can see it. Theme-only layouts are invisible when the admin theme is different. `andro apply theme` copies the theme's `layouts/tabler/` into the platform `web/layouts/tabler/` when it is present.
 
 ## Settings
 
