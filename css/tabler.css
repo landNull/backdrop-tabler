@@ -49,3 +49,46 @@ div.messages.error { background: var(--tblr-danger-lt, #f8d7da); }
 .node.card, .comment.card, .profile.card { margin-bottom: 1.5rem; }
 .block { margin-bottom: 1rem; }
 .block-title { margin-bottom: 0.5rem; }
+
+/* Page chrome */
+.l-header, .l-navbar, header.l-header {
+  background: var(--tblr-bg-surface, #1a1d23);
+  border-bottom: 1px solid var(--tblr-border-color, #2c3038);
+  padding: 0.75rem 1rem;
+}
+.l-header a, .site-name a { color: inherit; text-decoration: none; }
+.site-name { font-size: 1.25rem; font-weight: 600; margin: 0; }
+
+/* Menu */
+ul.menu, .menu { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+ul.menu li a, .menu li a {
+  display: block;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--tblr-border-radius, 4px);
+  color: inherit;
+  text-decoration: none;
+}
+ul.menu li a:hover, .menu li a:hover { background: var(--tblr-bg-surface-secondary, #2c3038); }
+ul.menu li.active a, .menu li.active a { background: var(--tblr-primary, #206bc4); color: #fff; }
+
+/* Content area */
+.l-content, .l-main, main, .page-body { padding: 1.5rem 0; }
+.l-content > .block, .l-main > .block { margin-bottom: 1.5rem; }
+
+/* Cards from nodes and blocks */
+.node, .block, .view {
+  background: var(--tblr-bg-surface, #1e2228);
+  border: 1px solid var(--tblr-border-color, #2c3038);
+  border-radius: var(--tblr-border-radius, 4px);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.node h2, .block-title, .view .card-title { margin-top: 0; }
+
+/* Links */
+a { color: var(--tblr-primary, #206bc4); }
+a:hover { text-decoration: underline; }
+
+/* Search form */
+.block-search form, #search-block-form { display: flex; gap: 0.5rem; align-items: center; }
+.block-search .form-text { flex: 1; }
