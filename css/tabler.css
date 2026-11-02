@@ -44,3 +44,8 @@ div.messages.error { background: var(--tblr-danger-lt, #f8d7da); }
   border-radius: var(--tblr-border-radius, 4px);
 }
 .pager li.pager-current span { background: var(--tblr-primary, #206bc4); color: #fff; }
+
+/* Node, comment, user, block */
+.node.card, .comment.card, .profile.card { margin-bottom: 1.5rem; }
+.block { margin-bottom: 1rem; }
+.block-title { margin-bottom: 0.5rem; }
