@@ -21,6 +21,7 @@ settings[tabler_navbar_user_menu] = 0
 settings[tabler_breadcrumb_home] = 1
 settings[tabler_breadcrumb_title] = 0
 settings[tabler_datetime] = 0
+settings[tabler_debug] = 0
 
 regions[header] = Header
 regions[navigation] = Navigation

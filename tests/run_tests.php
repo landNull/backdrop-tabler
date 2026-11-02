@@ -100,6 +100,9 @@ function backdrop_js_defaults($data = NULL) {
 function backdrop_http_request($url, $options = array()) {
   return $GLOBALS['HTTP_RESPONSE'] ?: (object) array('code' => 0, 'error' => 'offline', 'data' => NULL);
 }
+function config_get($name, $key) {
+  return isset($GLOBALS['CONFIG'][$name][$key]) ? $GLOBALS['CONFIG'][$name][$key] : NULL;
+}
 function backdrop_json_decode($s) { return json_decode($s, TRUE); }
 function backdrop_add_css($p, $o = array()) {}
 function backdrop_add_js($p, $o = array()) {}
@@ -424,6 +427,35 @@ tabler_preprocess_node($variables);
 ok(!isset($variables['timeago']), 'timeago off by default');
 
 /* ---------------------------------------------------------------------------
+ * 9b. Debug mode
+ * ------------------------------------------------------------------------- */
+
+echo "\n== debug mode ==\n";
+
+set_settings($DEFAULTS);
+$GLOBALS['CONFIG'] = array('system.core' => array('theme_debug' => FALSE));
+$GLOBALS['REQUEST_PATH'] = '';
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+tabler_preprocess_page($variables);
+ok(!in_array('tabler-debug', $variables['classes']), 'debug off: no tabler-debug class');
+ok(!isset($variables['page_bottom']), 'debug off: no debug panel');
+
+set_settings(array_merge($DEFAULTS, array('tabler_debug' => 1)));
+$GLOBALS['CONFIG'] = array('system.core' => array('theme_debug' => TRUE));
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+tabler_preprocess_page($variables);
+ok(in_array('tabler-debug', $variables['classes']), 'debug on: tabler-debug body class');
+contains(isset($variables['page_bottom']) ? $variables['page_bottom'] : '', 'tabler-debug-panel', 'debug on: panel rendered');
+contains($variables['page_bottom'], 'CDN @tabler/core@1.4.0', 'panel shows CDN source + version');
+contains($variables['page_bottom'], 'mode: auto', 'panel shows resolved mode');
+contains($variables['page_bottom'], 'theme_debug: on', 'panel shows core theme_debug state');
+
+set_settings(array_merge($DEFAULTS, array('tabler_debug' => 1, 'tabler_cdn' => 'module')));
+$variables = array('html_attributes' => array(), 'classes' => array(), 'is_front' => TRUE);
+tabler_preprocess_page($variables);
+contains($variables['page_bottom'], 'bundled dist/', 'panel shows bundled source');
+
+/* ---------------------------------------------------------------------------
  * 10. Theme settings form
  * ------------------------------------------------------------------------- */
 
@@ -439,9 +471,10 @@ is($form['tabler_framework']['#group'], 'tabler_tabs', 'framework fieldset in th
 is($form['tabler_appearance']['#group'], 'tabler_tabs', 'appearance fieldset in the tab group');
 is($form['tabler_layout_group']['#group'], 'tabler_tabs', 'layout fieldset in the tab group');
 is($form['tabler_chrome']['#group'], 'tabler_tabs', 'chrome fieldset in the tab group');
-foreach (array('tabler_cdn', 'tabler_version', 'tabler_mode', 'tabler_primary', 'tabler_base', 'tabler_radius', 'tabler_layout', 'tabler_navbar', 'tabler_navbar_theme', 'tabler_navbar_user_menu', 'tabler_breadcrumb_home', 'tabler_breadcrumb_title', 'tabler_datetime') as $key) {
+is($form['tabler_debug_group']['#group'], 'tabler_tabs', 'debug fieldset in the tab group');
+foreach (array('tabler_cdn', 'tabler_version', 'tabler_mode', 'tabler_primary', 'tabler_base', 'tabler_radius', 'tabler_layout', 'tabler_navbar', 'tabler_navbar_theme', 'tabler_navbar_user_menu', 'tabler_breadcrumb_home', 'tabler_breadcrumb_title', 'tabler_datetime', 'tabler_debug') as $key) {
   $found = FALSE;
-  foreach (array('tabler_framework', 'tabler_appearance', 'tabler_layout_group', 'tabler_chrome') as $group) {
+  foreach (array('tabler_framework', 'tabler_appearance', 'tabler_layout_group', 'tabler_chrome', 'tabler_debug_group') as $group) {
     if (isset($form[$group][$key])) { $found = TRUE; }
   }
   ok($found, "setting element present: $key");
@@ -476,7 +509,7 @@ $info_text = file_get_contents($THEME_ROOT . '/tabler.info');
 preg_match_all('/^settings\[([^\]]+)\]\s*=\s*(.+)$/m', $info_text, $m, PREG_SET_ORDER);
 $info_settings = array();
 foreach ($m as $row) { $info_settings[$row[1]] = trim($row[2], " \t\"'"); }
-foreach (array('tabler_cdn', 'tabler_version', 'tabler_mode', 'tabler_navbar_user_menu', 'tabler_breadcrumb_home', 'tabler_breadcrumb_title', 'tabler_datetime') as $key) {
+foreach (array('tabler_cdn', 'tabler_version', 'tabler_mode', 'tabler_navbar_user_menu', 'tabler_breadcrumb_home', 'tabler_breadcrumb_title', 'tabler_datetime', 'tabler_debug') as $key) {
   ok(isset($info_settings[$key]), "info default: $key");
 }
 ok(file_exists($THEME_ROOT . '/css/tabler.css') && file_exists($THEME_ROOT . '/js/tabler.js'), 'info-referenced assets exist');

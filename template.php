@@ -113,6 +113,36 @@ function tabler_preprocess_page(&$variables) {
   foreach ($user->roles as $role) {
     $variables['classes'][] = 'role-' . backdrop_clean_css_identifier($role);
   }
+
+  // Debug mode: body class plus an on-page panel with the resolved settings.
+  if (theme_get_setting('tabler_debug', 'tabler')) {
+    $variables['classes'][] = 'tabler-debug';
+    $cdn = theme_get_setting('tabler_cdn', 'tabler');
+    if (!$cdn) {
+      $source = 'disabled (no framework loaded by the theme)';
+    }
+    elseif ($cdn === 'module' || $cdn === 'bundled') {
+      $source = 'bundled dist/ in the theme';
+    }
+    else {
+      $ver = theme_get_setting('tabler_version', 'tabler');
+      $source = 'CDN @tabler/core@' . ($ver ? $ver : '1.4.0');
+    }
+    try {
+      $core_theme_debug = config_get('system.core', 'theme_debug') ? 'on' : 'off';
+    }
+    catch (Exception $e) {
+      $core_theme_debug = 'unknown';
+    }
+    $panel = '<pre class="tabler-debug-panel">' . check_plain(
+      "Tabler debug\n" .
+      'framework: ' . $source . "\n" .
+      'mode: ' . $mode . '  primary: ' . $primary . '  base: ' . $base . '  radius: ' . $radius . "\n" .
+      'layout: ' . $layout . '  navbar: ' . $navbar . '  navbar theme: ' . theme_get_setting('tabler_navbar_theme', 'tabler') . "\n" .
+      'core theme_debug: ' . $core_theme_debug . ' (admin/config/development/performance)'
+    ) . '</pre>';
+    $variables['page_bottom'] = (isset($variables['page_bottom']) ? $variables['page_bottom'] : '') . $panel;
+  }
 }
 
 /**

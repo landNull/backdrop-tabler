@@ -62,6 +62,15 @@
         }
         return summary.join('<br>');
       });
+
+      // Debug
+
+      $context.find('#edit-tabler-debug-group').backdropSetSummary(function () {
+        if ($context.find(':input[name="tabler_debug"]').is(':checked')) {
+          return Backdrop.t('Debug mode on');
+        }
+        return Backdrop.t('Off');
+      });
     }
   };
 

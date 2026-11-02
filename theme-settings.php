@@ -237,4 +237,21 @@ function tabler_form_system_theme_settings_alter(&$form, &$form_state) {
     '#default_value' => theme_get_setting('tabler_datetime', $theme_name),
     '#description' => t('If enabled, shows "XX time ago" instead of the raw date for nodes and comments.'),
   );
+
+  // Debug.
+
+  $form['tabler_debug_group'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Debug'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#group' => 'tabler_tabs',
+  );
+
+  $form['tabler_debug_group']['tabler_debug'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Debug mode'),
+    '#description' => t('Adds a "tabler-debug" body class and an on-page panel with the resolved theme settings and framework source. For template file-name comments, also enable the core theme debug on the performance page (admin/config/development/performance).'),
+    '#default_value' => theme_get_setting('tabler_debug', $theme_name),
+  );
 }

@@ -56,6 +56,7 @@ The theme settings page writes `tabler.settings` (vertical tabs: Framework, Appe
 | breadcrumb-home | 0/1, show the Home breadcrumb link |
 | breadcrumb-title | 0/1, append the current page title |
 | datetime | 0/1, "XX time ago" for nodes and comments |
+| debug | 0/1, debug mode: `tabler-debug` body class + on-page panel with resolved settings and framework source |
 
 The framework CSS/JS is injected in `tabler_css_alter()` / `tabler_js_alter()` at a weight that keeps it ahead of `css/tabler.css` and `js/tabler.js`, whether it comes from the CDN or the bundled copy in `dist/` (Tabler 1.4.0, minified).
 
@@ -79,6 +80,10 @@ Content images live in the site files directory. They are not theme-owned. Image
 ## Cache
 
 Devel and test run with cache off. Live runs with cache on. `stage_health` checks this.
+
+## Debug
+
+Set `debug = 1` on the theme settings page (or `andro theme set @site debug 1`): adds a `tabler-debug` body class and a fixed on-page panel listing the resolved settings and the framework source (CDN URL/version or bundled). For per-template file-name comments, enable the core theme debug at `admin/config/development/performance` (`theme_debug` in `system.core`).
 
 ## Tests
 
