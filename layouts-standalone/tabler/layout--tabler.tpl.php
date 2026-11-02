@@ -17,6 +17,9 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
           <?php print $content['header']; ?>
         <?php endif; ?>
       </h1>
+      <?php if (!empty($user_menu)): ?>
+        <?php print $user_menu; ?>
+      <?php endif; ?>
       <div class="collapse navbar-collapse" id="tabler-nav">
         <?php if (!empty($content['navigation'])): ?>
           <?php print $content['navigation']; ?>
@@ -27,7 +30,7 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
 
   <div class="page-wrapper">
     <div class="page-body">
-      <div class="container-xl">
+      <div class="<?php print $container_class; ?>">
         <?php if (!empty($content['content'])): ?>
           <?php print $content['content']; ?>
         <?php endif; ?>
@@ -39,7 +42,7 @@ $navbar_theme = $navbar_theme ? $navbar_theme : 'dark';
 
     <?php if (!empty($content['footer'])): ?>
       <footer class="footer footer-transparent d-print-none">
-        <div class="container-xl">
+        <div class="<?php print $container_class; ?>">
           <?php print $content['footer']; ?>
         </div>
       </footer>

@@ -18,6 +18,9 @@
     <div class="text-secondary mb-2">
       <?php print $user_picture; ?>
       <?php print $submitted; ?>
+      <?php if (!empty($timeago)): ?>
+        <small class="text-muted">&middot; <?php print $timeago; ?></small>
+      <?php endif; ?>
       <?php print $permalink; ?>
     </div>
 

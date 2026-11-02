@@ -17,6 +17,10 @@ settings[tabler_radius] = 1
 settings[tabler_layout] = fluid
 settings[tabler_navbar] = vertical
 settings[tabler_navbar_theme] = dark
+settings[tabler_navbar_user_menu] = 0
+settings[tabler_breadcrumb_home] = 1
+settings[tabler_breadcrumb_title] = 0
+settings[tabler_datetime] = 0
 
 regions[header] = Header
 regions[navigation] = Navigation
