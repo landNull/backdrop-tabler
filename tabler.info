@@ -1,0 +1,27 @@
+name = Tabler
+description = Tabler for Backdrop. Front end and admin. Settings on this page.
+type = theme
+backdrop = 1.x
+version = 1.0.0
+
+stylesheets[all][] = css/tabler.css
+
+scripts[] = js/tabler.js
+
+settings[tabler_cdn] = 1
+settings[tabler_version] = 1.4.0
+settings[tabler_mode] = auto
+settings[tabler_primary] = blue
+settings[tabler_base] = gray
+settings[tabler_radius] = 1
+settings[tabler_layout] = fluid
+settings[tabler_navbar] = vertical
+settings[tabler_navbar_theme] = dark
+
+regions[header] = Header
+regions[navigation] = Navigation
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[content] = Content
+regions[sidebar] = Sidebar
+regions[footer] = Footer
